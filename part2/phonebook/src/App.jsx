@@ -20,9 +20,14 @@ const App = () => {
       id: persons.length + 1,
       name: newName
     }
-  
+    
+    const allNames = persons.map(person => person.name)
+    if(allNames.includes(newName)) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+
     setPersons(persons.concat(personObject))
-    console.log('button clicked', event.target)
     setNewName('')
   }
 
