@@ -18,7 +18,6 @@ const App = () => {
       .then(initialPersons => {
         setPersons(initialPersons)
       })
-    axios
   }, [])
 
   const addName = (event) => {
@@ -35,7 +34,7 @@ const App = () => {
       return
     }
 
-    axios
+    personService
       .create(personObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
