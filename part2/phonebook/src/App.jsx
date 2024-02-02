@@ -58,6 +58,20 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const toggleDeletionOf = person => {
+    if (window.confirm(`Delete ${person.name} ?`)){
+      personService
+      .remove(person.id)
+      .then(response => {
+        console.log(response)
+        setPersons(persons.filter(n => n.id !== person.id))
+      })
+      .catch (error => {
+        console.log(error)
+      })
+    }
+  }
+
   const personsToShow = filter === ''
     ? persons
     : persons.filter(person =>
@@ -70,7 +84,7 @@ const App = () => {
       <h3>add a new</h3>
       <Form onSubmit={addName} nameValue ={newName} nameChange={handleNameChange} numberValue={newNumber} numberChange={handleNumberChange}/>
       <h3>Numbers</h3>
-      <Persons persons={personsToShow}/>
+      <Persons persons={personsToShow} toggle={toggleDeletionOf}/>
     </div>
   )
 }
