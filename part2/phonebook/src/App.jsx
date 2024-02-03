@@ -3,6 +3,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     console.log('effect')
@@ -39,6 +41,12 @@ const App = () => {
         })
         setNewName('')
         setNewNumber('')
+        setErrorMessage(
+          `${changedPerson.name}'s number changed`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       }
       return
     }
@@ -49,6 +57,12 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+        setErrorMessage(
+          `Added ${returnedPerson.name}`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
   }
 
@@ -89,6 +103,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Filter value={filter} onChange={handleFilterChange}/>
       <h3>add a new</h3>
       <Form onSubmit={addName} nameValue ={newName} nameChange={handleNameChange} numberValue={newNumber} numberChange={handleNumberChange}/>
