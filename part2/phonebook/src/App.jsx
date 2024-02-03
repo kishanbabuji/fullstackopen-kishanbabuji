@@ -11,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
@@ -38,15 +39,23 @@ const App = () => {
         .update(person.id, changedPerson)
         .then(returnedPerson => {
           setPersons(persons.map(person => person.id !== changedPerson.id ? person : returnedPerson))
+          setNewName('')
+          setNewNumber('')
+          setSuccessMessage(
+            `${changedPerson.name}'s number changed`
+          )
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
         })
-        setNewName('')
-        setNewNumber('')
-        setErrorMessage(
-          `${changedPerson.name}'s number changed`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
+        .catch(() => {
+          setErrorMessage(
+            `Information of ${changedPerson.name} has already been removed from the server`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
       }
       return
     }
@@ -57,11 +66,11 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
-        setErrorMessage(
+        setSuccessMessage(
           `Added ${returnedPerson.name}`
         )
         setTimeout(() => {
-          setErrorMessage(null)
+          setSuccessMessage(null)
         }, 5000)
       })
   }
@@ -103,7 +112,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification message={successMessage} className={'success'}/>
+      <Notification message={errorMessage} className={'error'}/>
       <Filter value={filter} onChange={handleFilterChange}/>
       <h3>add a new</h3>
       <Form onSubmit={addName} nameValue ={newName} nameChange={handleNameChange} numberValue={newNumber} numberChange={handleNumberChange}/>
