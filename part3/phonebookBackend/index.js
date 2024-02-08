@@ -7,6 +7,12 @@ const randomId = () => {
     return Math.floor(Math.random() * 10000)
 }
 
+const findName = (newName) => {
+    console.log(newName)
+    const allNames = persons.map(person => person.name)
+    return allNames.includes(newName)
+}
+
 let persons = [
     { 
       "id": 1,
@@ -62,8 +68,27 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-    const person = request.body
-    person.id = randomId()
+    const body = request.body
+    console.log(body.name)
+    if (!body.name) {
+        return response.status(400).json({ 
+          error: 'name missing' 
+        })
+    } else if (!body.number) {
+        return response.status(400).json({ 
+          error: 'number missing' 
+        })
+    } else if (findName(body.name)) {
+        return response.status(400).json({ 
+            error: 'name must be unique' 
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: randomId()
+    }
 
     persons = persons.concat(person)
 
