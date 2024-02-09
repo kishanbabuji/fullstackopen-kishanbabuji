@@ -3,9 +3,12 @@ const app = express()
 const morgan = require('morgan')
 
 app.use(express.json())
+// custom token for :body (Calling morgan.token() using the same name as an existing token will overwrite that token definition.)
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+
 app.use(
-    morgan(':method :url :status :res[content-length] - :response-time ms')
-  );
+  morgan(':method :url :status :res[content-length] - :response-time ms :body')
+)
 
 const randomId = () => {
     return Math.floor(Math.random() * 10000)
