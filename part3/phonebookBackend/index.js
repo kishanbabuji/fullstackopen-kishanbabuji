@@ -5,6 +5,7 @@ const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('dist'))
 // custom token for :body (Calling morgan.token() using the same name as an existing token will overwrite that token definition.)
 morgan.token('body', (req, res) => JSON.stringify(req.body))
 
